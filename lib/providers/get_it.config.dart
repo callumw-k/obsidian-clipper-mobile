@@ -24,7 +24,7 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
-    gh.singleton<_i770.AuthDioClient>(() => _i770.AuthDioClient());
+    gh.singletonAsync<_i770.AuthDioClient>(() => _i770.AuthDioClient.create());
     return this;
   }
 }

@@ -1,14 +1,29 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:logging/logging.dart';
 import 'package:obsidian_clipper/providers/dio.dart';
 import 'package:obsidian_clipper/providers/get_it.dart';
 
-void main() {
-  configureDependencies();
+class Themes {
+  static final lightTheme = ThemeData(brightness: Brightness.light, useMaterial3: true);
+  static final darkTheme = ThemeData(brightness: Brightness.dark, useMaterial3: true);
+}
+
+void initLogging() {
   Logger.root.level = Level.ALL; // Capture all logs.
   Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.loggerName}: ${record.message}');
+    if (kDebugMode) {
+      print('${record.level.name}: ${record.time}: ${record.loggerName}: ${record.message}');
+    }
   });
+}
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  initLogging();
+  configureDependencies();
+
   runApp(const MyApp());
 }
 
@@ -19,9 +34,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: ThemeMode.system,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -30,15 +45,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -46,50 +52,80 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   final logger = Logger('MyHomePage');
 
-  final dio = getIt<AuthDioClient>().client;
+  final _formKey = GlobalKey<FormBuilderState>();
 
-  void login() async {
-    final response = await dio
-        .post('https://cwk.sh/api/login', data: {'email': 'cwellkane@gmail.com', 'password': 'urf8gbw@PKG*gmn1nkv'});
-    logger.fine(response);
+  void _login(String email, String password) async {
+    final dio = await getIt.getAsync<AuthDioClient>();
+
+    final response = await dio.client.post('/login', data: {'email': email, 'password': password});
+    var token = response.data['access_token'] as String?;
+    if (token != null && token.isNotEmpty) {
+      await dio.storeAndSetToken(token);
+    }
+    final links = await dio.client.get('/links');
+    logger.shout(links.data.toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
+      body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: FormBuilder(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    FormBuilderTextField(
+                      name: 'email',
+                      autofillHints: [AutofillHints.email],
+                      decoration: InputDecoration(labelText: 'Email', filled: true),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    FormBuilderTextField(
+                      name: 'password',
+                      obscureText: true,
+                      autofillHints: [AutofillHints.password],
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        filled: true,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    FilledButton(
+                      onPressed: () {
+                        var valid = _formKey.currentState?.saveAndValidate() ?? false;
+
+                        if (!valid) return;
+
+                        final email = _formKey.currentState?.value['email'];
+                        final password = _formKey.currentState?.value['password'];
+
+                        logger.fine('Email and password is $email, $password');
+
+                        _login(email, password);
+                      },
+                      child: Text('Submit'),
+                    )
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: login,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

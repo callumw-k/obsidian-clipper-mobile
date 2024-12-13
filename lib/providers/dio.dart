@@ -20,9 +20,13 @@ class AuthDioClient {
   }
 
   void setBearerToken(String token) {
-    if (token.isNotEmpty) {
-      client.options.headers['Authorization'] = 'Bearer $token';
-    }
+    client.options.headers['Authorization'] = 'Bearer $token';
+  }
+
+  Future<void> storeAndSetToken(String token) async {
+    final storage = SharedPreferencesAsync();
+    storage.setString('bearer_token', token);
+    client.options.headers['Authorization'] = 'Bearer $token';
   }
 
   @factoryMethod
