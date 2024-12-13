@@ -23,7 +23,9 @@ class CustomTheme {
 }
 
 class Themes {
-  static final lightTheme = CustomTheme(Brightness.light).themeData.copyWith(primaryColor: Colors.orange);
+  static final lightTheme = CustomTheme(Brightness.light).themeData.copyWith(
+        primaryColor: Colors.orange,
+      );
   static final darkTheme = CustomTheme(Brightness.dark).themeData.copyWith(
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(218, 0, 255, 1), brightness: Brightness.dark),
       );
@@ -38,10 +40,10 @@ void initLogging() {
   });
 }
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initLogging();
-  configureDependencies();
+  await configureDependencies();
 
   runApp(
     ProviderScope(

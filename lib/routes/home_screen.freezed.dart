@@ -21,7 +21,10 @@ Link _$LinkFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Link {
   String get title => throw _privateConstructorUsedError;
-  String get image => throw _privateConstructorUsedError;
+  String get image =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
+  @JsonKey(name: 'original_url')
+  String get originalUrl => throw _privateConstructorUsedError;
 
   /// Serializes this Link to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,7 +40,10 @@ abstract class $LinkCopyWith<$Res> {
   factory $LinkCopyWith(Link value, $Res Function(Link) then) =
       _$LinkCopyWithImpl<$Res, Link>;
   @useResult
-  $Res call({String title, String image});
+  $Res call(
+      {String title,
+      String image,
+      @JsonKey(name: 'original_url') String originalUrl});
 }
 
 /// @nodoc
@@ -57,6 +63,7 @@ class _$LinkCopyWithImpl<$Res, $Val extends Link>
   $Res call({
     Object? title = null,
     Object? image = null,
+    Object? originalUrl = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -66,6 +73,10 @@ class _$LinkCopyWithImpl<$Res, $Val extends Link>
       image: null == image
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
+              as String,
+      originalUrl: null == originalUrl
+          ? _value.originalUrl
+          : originalUrl // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -78,7 +89,10 @@ abstract class _$$LinkImplCopyWith<$Res> implements $LinkCopyWith<$Res> {
       __$$LinkImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String image});
+  $Res call(
+      {String title,
+      String image,
+      @JsonKey(name: 'original_url') String originalUrl});
 }
 
 /// @nodoc
@@ -95,6 +109,7 @@ class __$$LinkImplCopyWithImpl<$Res>
   $Res call({
     Object? title = null,
     Object? image = null,
+    Object? originalUrl = null,
   }) {
     return _then(_$LinkImpl(
       title: null == title
@@ -105,6 +120,10 @@ class __$$LinkImplCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
+      originalUrl: null == originalUrl
+          ? _value.originalUrl
+          : originalUrl // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -112,7 +131,10 @@ class __$$LinkImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LinkImpl implements _Link {
-  _$LinkImpl({required this.title, required this.image});
+  _$LinkImpl(
+      {required this.title,
+      required this.image,
+      @JsonKey(name: 'original_url') required this.originalUrl});
 
   factory _$LinkImpl.fromJson(Map<String, dynamic> json) =>
       _$$LinkImplFromJson(json);
@@ -121,10 +143,14 @@ class _$LinkImpl implements _Link {
   final String title;
   @override
   final String image;
+// ignore: invalid_annotation_target
+  @override
+  @JsonKey(name: 'original_url')
+  final String originalUrl;
 
   @override
   String toString() {
-    return 'Link(title: $title, image: $image)';
+    return 'Link(title: $title, image: $image, originalUrl: $originalUrl)';
   }
 
   @override
@@ -133,12 +159,14 @@ class _$LinkImpl implements _Link {
         (other.runtimeType == runtimeType &&
             other is _$LinkImpl &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.image, image) || other.image == image));
+            (identical(other.image, image) || other.image == image) &&
+            (identical(other.originalUrl, originalUrl) ||
+                other.originalUrl == originalUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, title, image);
+  int get hashCode => Object.hash(runtimeType, title, image, originalUrl);
 
   /// Create a copy of Link
   /// with the given fields replaced by the non-null parameter values.
@@ -157,7 +185,10 @@ class _$LinkImpl implements _Link {
 }
 
 abstract class _Link implements Link {
-  factory _Link({required final String title, required final String image}) =
+  factory _Link(
+          {required final String title,
+          required final String image,
+          @JsonKey(name: 'original_url') required final String originalUrl}) =
       _$LinkImpl;
 
   factory _Link.fromJson(Map<String, dynamic> json) = _$LinkImpl.fromJson;
@@ -165,7 +196,10 @@ abstract class _Link implements Link {
   @override
   String get title;
   @override
-  String get image;
+  String get image; // ignore: invalid_annotation_target
+  @override
+  @JsonKey(name: 'original_url')
+  String get originalUrl;
 
   /// Create a copy of Link
   /// with the given fields replaced by the non-null parameter values.

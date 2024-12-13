@@ -15,16 +15,19 @@ import 'dio.dart' as _i770;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
-  _i174.GetIt init({
+  Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
-  }) {
+  }) async {
     final gh = _i526.GetItHelper(
       this,
       environment,
       environmentFilter,
     );
-    gh.singletonAsync<_i770.AuthDioClient>(() => _i770.AuthDioClient.create());
+    await gh.singletonAsync<_i770.AuthDioClient>(
+      () => _i770.AuthDioClient.create(),
+      preResolve: true,
+    );
     return this;
   }
 }

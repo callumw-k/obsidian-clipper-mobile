@@ -29,7 +29,7 @@ class AuthDioClient {
     client.options.headers['Authorization'] = 'Bearer $token';
   }
 
-  @factoryMethod
+  @FactoryMethod(preResolve: true)
   static Future<AuthDioClient> create() async {
     final dioClient = AuthDioClient();
     final storage = SharedPreferencesAsync();

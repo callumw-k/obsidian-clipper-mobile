@@ -19,10 +19,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final logger = Logger('MyHomePage');
 
   final _formKey = GlobalKey<FormBuilderState>();
+  final dio = getIt.get<AuthDioClient>();
 
   void _login(String email, String password) async {
-    final dio = await getIt.getAsync<AuthDioClient>();
-
     final response = await dio.client.post('/login', data: {'email': email, 'password': password});
     var token = response.data['access_token'] as String?;
     if (token != null && token.isNotEmpty) {
