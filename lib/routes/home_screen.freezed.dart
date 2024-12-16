@@ -14,55 +14,58 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Link _$LinkFromJson(Map<String, dynamic> json) {
-  return _Link.fromJson(json);
+LinkDto _$LinkDtoFromJson(Map<String, dynamic> json) {
+  return _LinkDto.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Link {
+mixin _$LinkDto {
   String get title => throw _privateConstructorUsedError;
-  String get image =>
+  String get image => throw _privateConstructorUsedError;
+  int get id =>
       throw _privateConstructorUsedError; // ignore: invalid_annotation_target
   @JsonKey(name: 'original_url')
   String get originalUrl => throw _privateConstructorUsedError;
 
-  /// Serializes this Link to a JSON map.
+  /// Serializes this LinkDto to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of Link
+  /// Create a copy of LinkDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $LinkCopyWith<Link> get copyWith => throw _privateConstructorUsedError;
+  $LinkDtoCopyWith<LinkDto> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $LinkCopyWith<$Res> {
-  factory $LinkCopyWith(Link value, $Res Function(Link) then) =
-      _$LinkCopyWithImpl<$Res, Link>;
+abstract class $LinkDtoCopyWith<$Res> {
+  factory $LinkDtoCopyWith(LinkDto value, $Res Function(LinkDto) then) =
+      _$LinkDtoCopyWithImpl<$Res, LinkDto>;
   @useResult
   $Res call(
       {String title,
       String image,
+      int id,
       @JsonKey(name: 'original_url') String originalUrl});
 }
 
 /// @nodoc
-class _$LinkCopyWithImpl<$Res, $Val extends Link>
-    implements $LinkCopyWith<$Res> {
-  _$LinkCopyWithImpl(this._value, this._then);
+class _$LinkDtoCopyWithImpl<$Res, $Val extends LinkDto>
+    implements $LinkDtoCopyWith<$Res> {
+  _$LinkDtoCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Link
+  /// Create a copy of LinkDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? title = null,
     Object? image = null,
+    Object? id = null,
     Object? originalUrl = null,
   }) {
     return _then(_value.copyWith(
@@ -74,6 +77,10 @@ class _$LinkCopyWithImpl<$Res, $Val extends Link>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       originalUrl: null == originalUrl
           ? _value.originalUrl
           : originalUrl // ignore: cast_nullable_to_non_nullable
@@ -83,35 +90,38 @@ class _$LinkCopyWithImpl<$Res, $Val extends Link>
 }
 
 /// @nodoc
-abstract class _$$LinkImplCopyWith<$Res> implements $LinkCopyWith<$Res> {
-  factory _$$LinkImplCopyWith(
-          _$LinkImpl value, $Res Function(_$LinkImpl) then) =
-      __$$LinkImplCopyWithImpl<$Res>;
+abstract class _$$LinkDtoImplCopyWith<$Res> implements $LinkDtoCopyWith<$Res> {
+  factory _$$LinkDtoImplCopyWith(
+          _$LinkDtoImpl value, $Res Function(_$LinkDtoImpl) then) =
+      __$$LinkDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {String title,
       String image,
+      int id,
       @JsonKey(name: 'original_url') String originalUrl});
 }
 
 /// @nodoc
-class __$$LinkImplCopyWithImpl<$Res>
-    extends _$LinkCopyWithImpl<$Res, _$LinkImpl>
-    implements _$$LinkImplCopyWith<$Res> {
-  __$$LinkImplCopyWithImpl(_$LinkImpl _value, $Res Function(_$LinkImpl) _then)
+class __$$LinkDtoImplCopyWithImpl<$Res>
+    extends _$LinkDtoCopyWithImpl<$Res, _$LinkDtoImpl>
+    implements _$$LinkDtoImplCopyWith<$Res> {
+  __$$LinkDtoImplCopyWithImpl(
+      _$LinkDtoImpl _value, $Res Function(_$LinkDtoImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Link
+  /// Create a copy of LinkDto
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? title = null,
     Object? image = null,
+    Object? id = null,
     Object? originalUrl = null,
   }) {
-    return _then(_$LinkImpl(
+    return _then(_$LinkDtoImpl(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -120,6 +130,10 @@ class __$$LinkImplCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
       originalUrl: null == originalUrl
           ? _value.originalUrl
           : originalUrl // ignore: cast_nullable_to_non_nullable
@@ -130,19 +144,22 @@ class __$$LinkImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$LinkImpl implements _Link {
-  _$LinkImpl(
+class _$LinkDtoImpl implements _LinkDto {
+  _$LinkDtoImpl(
       {required this.title,
       required this.image,
+      required this.id,
       @JsonKey(name: 'original_url') required this.originalUrl});
 
-  factory _$LinkImpl.fromJson(Map<String, dynamic> json) =>
-      _$$LinkImplFromJson(json);
+  factory _$LinkDtoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LinkDtoImplFromJson(json);
 
   @override
   final String title;
   @override
   final String image;
+  @override
+  final int id;
 // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'original_url')
@@ -150,61 +167,65 @@ class _$LinkImpl implements _Link {
 
   @override
   String toString() {
-    return 'Link(title: $title, image: $image, originalUrl: $originalUrl)';
+    return 'LinkDto(title: $title, image: $image, id: $id, originalUrl: $originalUrl)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LinkImpl &&
+            other is _$LinkDtoImpl &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.image, image) || other.image == image) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.originalUrl, originalUrl) ||
                 other.originalUrl == originalUrl));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, title, image, originalUrl);
+  int get hashCode => Object.hash(runtimeType, title, image, id, originalUrl);
 
-  /// Create a copy of Link
+  /// Create a copy of LinkDto
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$LinkImplCopyWith<_$LinkImpl> get copyWith =>
-      __$$LinkImplCopyWithImpl<_$LinkImpl>(this, _$identity);
+  _$$LinkDtoImplCopyWith<_$LinkDtoImpl> get copyWith =>
+      __$$LinkDtoImplCopyWithImpl<_$LinkDtoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LinkImplToJson(
+    return _$$LinkDtoImplToJson(
       this,
     );
   }
 }
 
-abstract class _Link implements Link {
-  factory _Link(
+abstract class _LinkDto implements LinkDto {
+  factory _LinkDto(
           {required final String title,
           required final String image,
+          required final int id,
           @JsonKey(name: 'original_url') required final String originalUrl}) =
-      _$LinkImpl;
+      _$LinkDtoImpl;
 
-  factory _Link.fromJson(Map<String, dynamic> json) = _$LinkImpl.fromJson;
+  factory _LinkDto.fromJson(Map<String, dynamic> json) = _$LinkDtoImpl.fromJson;
 
   @override
   String get title;
   @override
-  String get image; // ignore: invalid_annotation_target
+  String get image;
+  @override
+  int get id; // ignore: invalid_annotation_target
   @override
   @JsonKey(name: 'original_url')
   String get originalUrl;
 
-  /// Create a copy of Link
+  /// Create a copy of LinkDto
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LinkImplCopyWith<_$LinkImpl> get copyWith =>
+  _$$LinkDtoImplCopyWith<_$LinkDtoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

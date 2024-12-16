@@ -37,7 +37,7 @@ class HomeRoute extends _i3.PageRouteInfo<void> {
 class LoginRoute extends _i3.PageRouteInfo<LoginRouteArgs> {
   LoginRoute({
     _i4.Key? key,
-    required dynamic Function(bool) onResult,
+    dynamic Function(bool)? onResult,
     List<_i3.PageRouteInfo>? children,
   }) : super(
           LoginRoute.name,
@@ -53,7 +53,8 @@ class LoginRoute extends _i3.PageRouteInfo<LoginRouteArgs> {
   static _i3.PageInfo page = _i3.PageInfo(
     name,
     builder: (data) {
-      final args = data.argsAs<LoginRouteArgs>();
+      final args =
+          data.argsAs<LoginRouteArgs>(orElse: () => const LoginRouteArgs());
       return _i2.LoginScreen(
         key: args.key,
         onResult: args.onResult,
@@ -65,12 +66,12 @@ class LoginRoute extends _i3.PageRouteInfo<LoginRouteArgs> {
 class LoginRouteArgs {
   const LoginRouteArgs({
     this.key,
-    required this.onResult,
+    this.onResult,
   });
 
   final _i4.Key? key;
 
-  final dynamic Function(bool) onResult;
+  final dynamic Function(bool)? onResult;
 
   @override
   String toString() {

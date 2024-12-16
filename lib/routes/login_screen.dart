@@ -4,12 +4,13 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:logging/logging.dart';
 import 'package:obsidian_clipper/providers/dio.dart';
 import 'package:obsidian_clipper/providers/get_it.dart';
+import 'package:obsidian_clipper/routes/auto_route.gr.dart';
 
 @RoutePage()
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, required this.onResult});
+  const LoginScreen({super.key, this.onResult});
 
-  final Function(bool result) onResult;
+  final Function(bool result)? onResult;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -21,13 +22,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final dio = getIt.get<AuthDioClient>();
 
-  void _login(String email, String password) async {
+  Future<void> _login(String email, String password) async {
     final response = await dio.client.post('/login', data: {'email': email, 'password': password});
-    var token = response.data['access_token'] as String?;
-    if (token != null && token.isNotEmpty) {
-      await dio.storeAndSetToken(token);
-      widget.onResult(true);
-    }
+    final token = response.data['access_token'] as String?;
+    if (token == null || token.isEmpty) return;
+    await dio.storeAndSetToken(token);
+    if (mounted) widget.onResult?.call(true) ?? context.router.replaceAll([HomeRoute()]);
   }
 
   @override

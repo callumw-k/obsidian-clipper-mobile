@@ -11,7 +11,7 @@ extension TextThemeExtensions on BuildContext {
       case FontSize.medium:
         return theme.bodyMedium;
       case FontSize.large:
-        return theme.headlineLarge;
+        return theme.titleLarge;
     }
   }
 }

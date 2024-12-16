@@ -6,16 +6,19 @@ part of 'home_screen.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$LinkImpl _$$LinkImplFromJson(Map<String, dynamic> json) => _$LinkImpl(
+_$LinkDtoImpl _$$LinkDtoImplFromJson(Map<String, dynamic> json) =>
+    _$LinkDtoImpl(
       title: json['title'] as String,
       image: json['image'] as String,
+      id: (json['id'] as num).toInt(),
       originalUrl: json['original_url'] as String,
     );
 
-Map<String, dynamic> _$$LinkImplToJson(_$LinkImpl instance) =>
+Map<String, dynamic> _$$LinkDtoImplToJson(_$LinkDtoImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
       'image': instance.image,
+      'id': instance.id,
       'original_url': instance.originalUrl,
     };
 
@@ -23,7 +26,7 @@ Map<String, dynamic> _$$LinkImplToJson(_$LinkImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$linkNotifierHash() => r'5b318ad4f147fea41dab0b935f6fa6d024736490';
+String _$linkNotifierHash() => r'f0f589a0a8956dc09c34d2a112760002bd600acc';
 
 /// See also [LinkNotifier].
 @ProviderFor(LinkNotifier)

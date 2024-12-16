@@ -12,6 +12,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import 'dio.dart' as _i770;
+import 'sqlite.dart' as _i584;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -26,6 +27,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     await gh.singletonAsync<_i770.AuthDioClient>(
       () => _i770.AuthDioClient.create(),
+      preResolve: true,
+    );
+    await gh.singletonAsync<_i584.DatabaseContext>(
+      () => _i584.DatabaseContext.create(),
       preResolve: true,
     );
     return this;
