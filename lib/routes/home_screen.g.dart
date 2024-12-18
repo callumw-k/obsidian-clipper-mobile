@@ -26,7 +26,7 @@ Map<String, dynamic> _$$LinkDtoImplToJson(_$LinkDtoImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$linkNotifierHash() => r'f0f589a0a8956dc09c34d2a112760002bd600acc';
+String _$linkNotifierHash() => r'8ff0fd4aecb307286fe3fe6559d94ded374e67a3';
 
 /// See also [LinkNotifier].
 @ProviderFor(LinkNotifier)

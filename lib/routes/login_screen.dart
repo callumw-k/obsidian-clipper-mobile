@@ -18,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final logger = Logger('MyHomePage');
+  bool isLoading = false;
 
   final _formKey = GlobalKey<FormBuilderState>();
   final dio = getIt.get<AuthDioClient>();
@@ -27,6 +28,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final token = response.data['access_token'] as String?;
     if (token == null || token.isEmpty) return;
     await dio.storeAndSetToken(token);
+
+    setState(() {
+      isLoading = false;
+    });
+
     if (mounted) widget.onResult?.call(true) ?? context.router.replaceAll([HomeRoute()]);
   }
 
@@ -64,8 +70,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: FilledButton(
-                        onPressed: () {
+                      child: ElevatedButton(
+
+                        onPressed: () async  {
+                          if (isLoading) return;
+                          setState(() {
+                            isLoading = true;
+                          });
                           var valid = _formKey.currentState?.saveAndValidate() ?? false;
 
                           if (!valid) return;
@@ -75,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           logger.fine('Email and password is $email, $password');
 
-                          _login(email, password);
+                          await _login(email, password);
                         },
                         child: Text('Submit'),
                       ),

@@ -15,6 +15,7 @@ class AuthDioClient {
       receiveTimeout: const Duration(seconds: 3),
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:obsidian_clipper/providers/get_it.dart';
+import 'package:obsidian_clipper/providers/sharing_intent.dart';
 import 'package:obsidian_clipper/routes/auto_route.dart';
 
 class CustomTheme {
@@ -52,13 +53,16 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
   final _appRouter = AppRouter();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    ref.watch(sharingIntentProvider);
+
     return MaterialApp.router(
       title: 'Flutter Demo',
       theme: Themes.lightTheme,

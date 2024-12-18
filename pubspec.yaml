@@ -46,7 +46,11 @@ dependencies:
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   sqflite: ^2.4.1
-  receive_sharing_intent: ^1.8.1
+  receive_sharing_intent:
+    git:
+      url: https://github.com/KasemJaffer/receive_sharing_intent
+      ref: master
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

@@ -12,11 +12,11 @@ import 'package:obsidian_clipper/routes/auto_route.gr.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'home_screen.freezed.dart';
+
 part 'home_screen.g.dart';
-
-
 
 @freezed
 class LinkDto with _$LinkDto {
@@ -47,24 +47,24 @@ class LinkNotifier extends _$LinkNotifier {
     final existingIds = existingLinks.map((link) => link.persistedId).toList();
     final newLinks = await fetchMissingLinks(existingIds);
     await batchInsert(newLinks);
-    return [ ...existingLinks, ...newLinks];
+    return [...existingLinks, ...newLinks];
   }
 
   Future<List<Link>> fetchMissingLinks(List<int> existingIds) async {
-      final response = await client.post('/links/sync', data: {'link_ids': existingIds});
-      logger.fine('Response data: ${response.data}');
+    final response = await client.post('/links/sync', data: {
+      'link_ids': existingIds.isNotEmpty ? existingIds : [1]
+    });
+    logger.fine('Response data: ${response.data}');
 
-      if (response.data is! List) throw Exception("Couldn't fetch links");
+    if (response.data is! List) throw Exception("Couldn't fetch links");
 
-      var dtos = (response.data as List).map((item) => LinkDto.fromJson(item)).toList();
-      var links = dtos.map((item) => Link.fromDto(item)).toList();
+    var dtos = (response.data as List).map((item) => LinkDto.fromJson(item)).toList();
+    var links = dtos.map((item) => Link.fromDto(item)).toList();
 
-      logger.fine('Mapped list: ${dtos.toString()}');
+    logger.fine('Mapped list: ${dtos.toString()}');
 
-      return links;
+    return links;
   }
-
-
 
   Future<List<Link>> getAll() async {
     var queryData = await db.query(linkTable);
@@ -80,10 +80,10 @@ class LinkNotifier extends _$LinkNotifier {
     return link;
   }
 
-  void createLink(Link link) async {
-    var response = await client.post('/links', data: {'original_url': link.originalUrl});
+  Future<void> createLink(String originalUrl) async {
+    var response = await client.post('/links', data: {'original_url': originalUrl});
     var dto = LinkDto.fromJson(response.data);
-    link = Link.fromDto(dto);
+    var link = Link.fromDto(dto);
 
     await insert(link);
 
@@ -101,12 +101,13 @@ class LinkNotifier extends _$LinkNotifier {
     });
     return links;
   }
-
 }
 
 abstract class LinkListItem {
   Widget buildTitle(BuildContext context);
+
   Widget buildImage(BuildContext context);
+
   Widget buildUrl(BuildContext context);
 }
 
@@ -120,6 +121,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final logger = Logger('HomeScreenLogger');
+
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Link>> links = ref.watch(linkNotifierProvider);
@@ -131,8 +133,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             switch (links) {
               AsyncData(:final value) => Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
+                  child: ListView.builder(
+                    shrinkWrap: true,
                     itemBuilder: (context, index) {
                       final link = value[index];
                       return Padding(
@@ -149,18 +151,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                             if (link.image.isNotEmpty) AspectRatio(
-                                aspectRatio: 16 / 9,
-                                child: Image.network(
-                                  link.image,
-                                  fit: BoxFit.cover,
+                              if (link.image.isNotEmpty)
+                                AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: Image.network(
+                                    link.image,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  link.title,
-                                  style: context.fontSize(FontSize.large),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    try {
+                                      final Uri url = Uri.parse(link.originalUrl);
+                                      if (!await launchUrl(url)) {
+                                        logger.severe("Couldn't launch URL");
+                                      }
+                                    } on Exception {
+                                      logger.severe("Couldn't launch URL");
+                                    }
+                                  },
+                                  child: Text(
+                                    link.title,
+                                    style: context.fontSize(FontSize.large),
+                                  ),
                                 ),
                               ),
                             ],
@@ -170,15 +185,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                     itemCount: value.length,
                   ),
-              ),
+                ),
               AsyncError() => const Text('Something went wrong'),
               _ => const SizedBox()
             },
-            OutlinedButton(onPressed: () async  {
-              var prefs = SharedPreferencesAsync();
-              await prefs.clear();
-              if (context.mounted) context.router.replaceAll([ LoginRoute(),]);
-            }, child: Text('Logout')),
+            OutlinedButton(
+                onPressed: () async {
+                  var prefs = SharedPreferencesAsync();
+                  await prefs.clear();
+                  if (context.mounted) {
+                    context.router.replaceAll([
+                      LoginRoute(),
+                    ]);
+                  }
+                },
+                child: Text('Logout')),
           ],
         ),
       ),
